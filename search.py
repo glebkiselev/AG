@@ -11,6 +11,7 @@ import csv
 from flask import Flask
 from flask import request, render_template, redirect, url_for, jsonify, send_file
 from flask import send_file
+from flask import send_from_directory
 from openpyxl import load_workbook
 import pandas
 from multiprocessing import Pool, Process
@@ -24,7 +25,6 @@ from werkzeug.utils import secure_filename
 UPLOAD_FOLDER = 'static'
 ALLOWED_EXTENSIONS = {'txt', 'pdf', 'csv', 'xls', 'xlsx', 'docx'}
 
-
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
@@ -32,35 +32,47 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 @app.route('/app.js')
 def sencha_app():
     return redirect(url_for('static', filename='app.js'))
-def allowed_file(filename):
-     return '.' in filename and \
-            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
-@app.route('/up', methods=['GET', 'POST'])
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+
+@app.route('/upload', methods=['POST'])
 def upload_file():
     if request.method == 'POST':
         # check if the post request has the file part
         if 'file' not in request.files:
             return redirect(request.url)
         file = request.files['file']
-         # if user does not select file, browser also
-         # submit a empty part without filename
+        # if user does not select file, browser also
+        # submit a empty part without filename
         if file.filename == '':
             return redirect(request.url)
         if file and allowed_file(file.filename):
-             filename = secure_filename(file.filename)
-             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-             return redirect(url_for('upload_file', filename=filename))
-    return '''
-     <!doctype html>
-     <title>Upload new File</title>
-     <h1>Upload new File</h1>
-     <form method=post enctype=multipart/form-data>
-       <p><input type=file name=file>
-          <input type=submit value=Upload>
-          <a href = "/upload"> LOOK File </a>
-     </form>
-            '''
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            return redirect(url_for('upload_file', filename=filename))
+
+
+# return '''
+#     <!doctype html>
+#     <title>Upload new File</title>
+#     <h1>Upload new File</h1>
+#     <form method=post enctype=multipart/form-data>
+#       <p><input type=file name=file>
+#          <input type=submit value=Upload>
+#          <a href = "/upload"> LOOK File </a>
+#     </form>
+#            '''
+
+@app.route('/uploads/<filename>')
+def uploaded_file(filename):
+    return send_from_directory(app.config['UPLOAD_FOLDER'],
+                               filename)
+
+
 
 def parse_links(links, visited, url):
     # убираем ссылки на на js и  css файлы
@@ -219,6 +231,7 @@ def main_alg(url, link, words, posts, visited_links, depth):
 
     return posts
 
+
 @app.route('/_findwords')
 def add_numbers():
     # get links and keywords
@@ -245,6 +258,7 @@ def add_numbers():
             # subprocess.call(['touch', filepath])
             post_searcher(url, words, depth, marks_and_models, filename)
             iterater += 1
+
 
 def group(iterable, count):
     return zip(*[iter(iterable)] * count)
@@ -369,7 +383,8 @@ def execsear():
 
     return [links, words]
 
-#def loginn ():
+
+# def loginn ():
 #    with open(os.path.join(APP_STATIC, 'english_words.txt')) as f:
 #        f.read()
 
