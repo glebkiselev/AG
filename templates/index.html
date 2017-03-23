@@ -160,6 +160,7 @@ nav a:focus {
   background-color: #ddd;
 } -->
 
+
 #border {
       max-width: 740px;
     border: 4px ridge grey;
@@ -167,6 +168,7 @@ nav a:focus {
     margin: auto;
 
 }
+
 #innerborder {
     max-width: 400px;
     position: relative;
@@ -174,6 +176,7 @@ nav a:focus {
     padding: 10px;
 
 }
+
 #log {
       max-width: 300px;
     position: relative;
@@ -184,7 +187,11 @@ nav a:focus {
     left: 410px;
 }
 
-
+#uloading2 {
+    margin: auto;
+    position: relative;
+    max-width: 299px;
+}
 #polya {
 	width: 1190px;
 	background-color: #ffffff;
@@ -192,7 +199,7 @@ nav a:focus {
 	padding-right: 100px;
     margin-right: 15%;
 	margin-left: 15%;
-	min-height:90%;
+	min-height:1500px;
 
 }
 #result {
@@ -328,25 +335,24 @@ function filePicked(oEvent) {
 <div id="text">
 <p>
    <p>url</p>
-  <input type="text" size="20" name="url" value="http://toyota-axsel.com"> <br>
+  <input type="text" size="20" name="url" value=""> <br>
   <p>word1</p>
-  <input type="text" size="10" name="word1" > <br>
+  <input type="text" size="20" name="word1" > <br>
   <p>word2</p>
-  <input type="text" size="10" name="word2"> <br>
+  <input type="text" size="20" name="word2"> <br>
   <p>word3</p>
-  <input type="text" size="10" name="word3"> <br>
+  <input type="text" size="20" name="word3"> <br>
 
   <span id="progress" style="display: none;">PROGRESS BAR</span>
   <!--<p><br><progress id="progressbar" value="0" max="1000"></progress></p>-->
 <nav class="cl-effect-1">
-<p><a href=# data-hover="Ссылка 1" id="calculate" onclick="$('#progress').css('display', 'block'); loadProgressBar();">Calculate server side</a>
+<p><a href=# data-hover="Ссылка 1" id="calculate" onclick="$('#progress').css('display', 'block'); loadProgressBar();">Parse from server</a>
+    <p><a href=# data-hover="Ссылка 1" id="calculate" onclick="$('#progress').css('display', 'block'); loadProgressBar();">Parse handle enter</a>
 <!-- <p><a href="/up" data-hover="Upload file" id="drum">Upload file</a> -->
 <p><a href="/file-downloads/" data-hover="Download" id="d">Doawnload file</a>
 </nav>
 <div id="table"><table></table></div>
 <div id="result1"><span id="result"></span></div>
-<form action="" method=post enctype=multipart/form-data>
-    <p><input type="file" id="my_file_input" />
 <div id='my_file_output'></div>
 <!-- <input type=submit value=Upload> -->
    </form>
@@ -358,10 +364,12 @@ function filePicked(oEvent) {
     <div id = "log">
 
         </div>
+    <div id ="uloading2">
      <form action="upload" method="post" enctype="multipart/form-data">
         <input type="file" name="file">
         <input type="submit" value="Upload">
       </form>
+    </div>
 </div>
 <!-- <script src="js/jquery.js">
 var progressbar = $('#progressbar'),

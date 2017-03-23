@@ -53,7 +53,7 @@ def upload_file():
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            return redirect(url_for('upload_file', filename=filename))
+            return redirect(url_for('uploaded_file', filename=filename))
 
 
 # return '''
@@ -258,6 +258,31 @@ def add_numbers():
             # subprocess.call(['touch', filepath])
             post_searcher(url, words, depth, marks_and_models, filename)
             iterater += 1
+
+
+@app.route('/_findwords')
+def hands():
+    urls = []
+
+    cars_file = "static/cars_csv.csv"
+    marks_and_models = read_csv(cars_file)
+    filename = 'reader.xlsx'
+    url = request.args.get('url')
+    urls.append(url)
+    word1 = request.args.get('word1')
+    word2 = request.args.get('word2')
+    word3 = request.args.get('word3')
+    iterater = 0
+    words = [str(word1), str(word2), str(word3)]
+    if len(word1.strip()) > 0:
+        words.append(word1)
+    if len(word2.strip()) > 0:
+        words.append(word2)
+    if len(word3.strip()) > 0:
+        words.append(word3)
+    depth = 3
+    post_searcher(url, words, depth, marks_and_models, filename)
+    iterater += 1
 
 
 def group(iterable, count):
