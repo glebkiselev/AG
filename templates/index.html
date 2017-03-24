@@ -276,7 +276,55 @@ function filePicked(oEvent) {
     reader.readAsBinaryString(oFile);
 }
 </script>-->
+<script type="text/javascript">
+  $(function() {
+    var submit_form = function(e) {
+      $.getJSON($SCRIPT_ROOT + '/_find_words',{
+        /*url: $('input[name="url"]').val(),*/
+		/*word1: $('input[name="word1"]').val(),
+		word2: $('input[name="word2"]').val(),
+		word3: $('input[name="word3"]').val() */
+      }, function(data) {
+		console.log(data)
+      /*  $('#result').html(data.result);*/
 
+	  //var jsonResult = '{{result_tab}}'.replace(/&#39;/g, '"');
+		//console.log(jsonResult);
+		try {
+			var table = document.getElementById("json_result");
+			//json = JSON.parse(data);
+			console.log(data.result_data.length);
+			for (var i = 0; i < data.result_data.length; i++) {
+				var row = table.insertRow(table.rows.length);
+
+				for (var j = 0; j < data.result_data[i].length; j++) {
+					var cell = row.insertCell(j);
+					var newText  = document.createTextNode(data.result_data[i][j]);
+					cell.appendChild(newText);
+				}
+			}
+		} catch(e) {
+			console.log("error " + e);
+		} finally {
+
+		}
+
+
+        $('input[name=url]').focus().select();
+		$('#progress').css('display', 'none');
+	/* 	console.log(data.result) */
+      });
+      return false;
+    };
+    $('a#calculate').bind('click', submit_form);
+    $('input[type=text]').bind('keydown', function(e) {
+      if (e.keyCode == 13) {
+        submit_form(e);
+      }
+    });
+    $('input[name=a]').focus();
+  });
+</script>
 
 <script type="text/javascript">
   $(function() {
